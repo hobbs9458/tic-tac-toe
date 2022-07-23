@@ -136,16 +136,16 @@ body {
 .new-game-btn:first-of-type {
     margin-bottom: 1rem;
 }
-.btn-1 {
+.new-game-vs-cpu-btn {
     background: var(--secondary-light-color)
 }
-.btn-1:hover {
+.new-game-vs-cpu-btn:hover {
     background: var(--secondary-light-color-active);
 }
-.btn-2 {
+.new-game-vs-player-btn {
     background: var(--secondary-dark-color)
 }
-.btn-2:hover {
+.new-game-vs-player-btn:hover {
     background: var(--secondary-dark-color-active);
 }
 
@@ -319,3 +319,7 @@ body {
 
 
 /* MORE UTILITIES */
+
+/* .svg-test-square path {
+    fill: black;
+} */
