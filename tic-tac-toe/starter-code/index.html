@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="index.js" defer></script>
+  <title>Frontend Mentor | Tic Tac Toe</title>
+</head>
+<body>
+  <main class="app-wrap">
+      <!-- New GAME MENU START -->
+    <div class="start-screen">
+      <div class="start-screen-icons-wrap">
+        <img src="./assets/icon-x.svg" alt="x icon" class="sm-icon">
+        <img src="./assets/icon-o.svg" alt="o icon" class="sm-icon">
+      </div>
+      <div class="pick-mark">
+        <h2 class="xs-heading">Pick player 1's mark</h2>
+        <div class="pick-mark-btn-wrap">
+          <button class="icon-picker-btn unselected-icon-btn x-icon-picker-btn btn">
+            <svg class="sm-icon" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+              <path class="unselected-icon icon-svg-path x-icon-picker-svg" d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+            </svg>
+          </button>
+          <button class="icon-picker-btn selected-icon-btn o-icon-picker-btn btn">
+            <svg class="sm-icon" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+              <path class="selected-icon icon-svg-path o-icon-picker-svg" d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+            </svg>
+          </button>
+        </div>
+        <p class="pick-mark-p">Remember: X goes first</p>
+      </div>
+      <button class="new-game-btn btn-1 btn">
+        <h2 class="s-heading">New Game (vs CPU)</h2>
+      </button>
+      <button class="new-game-btn btn-2 btn">
+        <h2 class="s-heading">New Game (vs player)</h2>
+      </button>
+    </div>
+
+    <!-- GAME BOARD -->
+    <div class="game-board hidden">
+
+      <!-- UPPER BOARD -->
+      <div class="upper-board">
+        <div class="game-board-icons-wrap">
+          <img src="./assets/icon-x.svg" alt="x icon" class="sm-icon">
+          <img src="./assets/icon-o.svg" alt="o icon" class="sm-icon">
+        </div>
+        <div class="player-turn-indicator">
+          <svg class="xs-icon indicator-svg" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path class="xs-icon-path" d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+          <svg class="xs-icon indicator-svg hidden" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path class="xs-icon-path" d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <h2 class="xs-heading">TURN</h2>
+        </div>
+        <button class="restart-btn btn">
+          <svg class="restart-btn-svg" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.524 0h-1.88a.476.476 0 0 0-.476.499l.159 3.284A9.81 9.81 0 0 0 9.835.317C4.415.317-.004 4.743 0 10.167.004 15.597 4.406 20 9.835 20a9.796 9.796 0 0 0 6.59-2.536.476.476 0 0 0 .019-.692l-1.348-1.349a.476.476 0 0 0-.65-.022 6.976 6.976 0 0 1-9.85-.63 6.987 6.987 0 0 1 .63-9.857 6.976 6.976 0 0 1 10.403 1.348l-4.027-.193a.476.476 0 0 0-.498.476v1.881c0 .263.213.476.476.476h7.944A.476.476 0 0 0 20 8.426V.476A.476.476 0 0 0 19.524 0Z" fill="#1F3641"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- MAIN BOARD -->
+      <div class="main-board">
+        <button class="square btn" data-row-1 data-col-1 data-across-1>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-1 data-col-2>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-1 data-col-3 data-across-2>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-2 data-col-1>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-2 data-col-2 data-across-1 data-across-2>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-2 data-col-3>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-3 data-col-1 data-across-2>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-3 data-col-2>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+        <button class="square btn" data-row-3 data-col-3 data-across-1>
+          <svg class="hidden square-svg square-svg-o" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+          </svg>
+          <svg class="hidden square-svg square-svg-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+          </svg>
+          <!-- O SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-o" width="66" height="66" viewBox="0,0,66,66" xmlns="http://www.w3.org/2000/svg">
+            <path d="M33 1c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C15.327 65 1 50.673 1 33 1 15.327 15.327 1 33 1Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" stroke="#F2B137" stroke-width="2" fill="none"/>
+          </svg>
+          <!-- X SVG OUTLINE -->
+          <svg class="hidden svg-outline-active svg-outline-active-x" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
+            <path d="M51.12 1.269c.511 0 1.023.195 1.414.586l9.611 9.611c.391.391.586.903.586 1.415s-.195 1.023-.586 1.414L44.441 32l17.704 17.705c.391.39.586.902.586 1.414 0 .512-.195 1.024-.586 1.415l-9.611 9.611c-.391.391-.903.586-1.415.586a1.994 1.994 0 0 1-1.414-.586L32 44.441 14.295 62.145c-.39.391-.902.586-1.414.586a1.994 1.994 0 0 1-1.415-.586l-9.611-9.611a1.994 1.994 0 0 1-.586-1.415c0-.512.195-1.023.586-1.414L19.559 32 1.855 14.295a1.994 1.994 0 0 1-.586-1.414c0-.512.195-1.024.586-1.415l9.611-9.611c.391-.391.903-.586 1.415-.586s1.023.195 1.414.586L32 19.559 49.705 1.855c.39-.391.902-.586 1.414-.586Z" stroke="#31C3BD" stroke-width="2" fill="none"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- LOWER BOARD -->
+      <div class="lower-board">
+        <div class="scoreboard scoreboard-x">
+          <p class="scoreboard-x-icon scoreboard-icon">X</p>
+          <h3 class="x-score score m-heading">0</h3>
+        </div>
+        <div class="scoreboard scoreboard-tie">
+          <p class="ties">TIES</p>
+          <h3 class="tie-score score m-heading">0</h3>
+        </div>
+        <div class="scoreboard scoreboard-o">
+          <p class="scoreboard-o-icon scoreboard-icon">O</p>
+          <h3 class="o-score score m-heading">0</h3>
+        </div>
+      </div>
+    </div>
+    <button class="cpu-go-btn">CPU GO</button>
+
+    <!-- ADD DARK OVERLAY ON GAMEBOARD ONCE A WINNER IS DECLARED -->
+    <div class="dark-overlay hidden"></div>
+    <div class="game-over-modal hidden">
+      <h3 class="game-over-msg xs-heading"></h3>
+      <div class="game-over-winner-msg">
+        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
+        </svg>
+        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
+        </svg>
+        <h2 class="l-heading end-of-round-msg">TAKES THE ROUND</h2>
+      </div>
+      
+      <button class="quit-btn btn">
+        <h3 class="xs-heading">QUIT</h3>
+      </button>
+      <button class="next-round-btn btn">
+        <h3 class="xs-heading">NEXT ROUND</h3>
+      </button>
+    </div>
+    <div class="reset-game-modal hidden">
+      <div class="reset-game-modal-content-wrap">
+        <h2 class="l-heading reset-modal-msg">RESTART GAME?</h2>
+        <div class="reset-btns-wrap">
+          <button class="btn reset-btn reset-btn-cancel">NO, CANCEL</button>
+          <button class="btn reset-btn reset-btn-confirm">YES RESTART</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+
+
+  <!-- 
+  New Game (vs CPU)
+  New Game (vs player) -->
+  <!-- X (You) Your score -->
+  <!-- Ties Ties score -->
+  <!-- X (CPU) CPU score -->
+
+</body>
+</html>
+
+<!-- Returning notes: 
+
+TODOS:
+- MAKE CPU GO AUTOMATICALLY AFTER THE USER
+- CREATE CPU STATE TO DICTATE GAMEPLAY
+- CPU STRATEGY
+- I DON'T LIKE THE HARDCODED STUFF I HAVE LIKE svg[3] etc. 
+USE CLASSES OR DATASETS TO MAKE THE APP MORE PROGRAMMATIC
+
+COMPLETED:
+7/20/22
+- IMPLEMENTED TESTING PHASE OF CPU FUNCTIONALITY: SCORE, RANDOM SQUARE, ETC.
+- REFACTORING JS
+- ACTIVE STATES ON GAMEBOARD SVGS
+- TIE SCREEN NOW DISPLAYING CORRECT MSG
+
+7/17/22
+- RESET ICON PICKER IS NOW PROGRAMMATIC
+- MOVED ALL EVENT LISTENERS TO BOTTOM (STILL NEED TO REFACTOR FURTHER)
+- GAME OVER MSGS - WORK ON STYLES FOR RESET AND GAME OVER MODALS
+- RESET ICON SELECTOR ON START SCREEN AFTER GAME QUIT/RESET
+- HOVER STATE ON RESET SCREEN RESTART BTN
+- GAME OVER PLAYER MSG STILL BEING DISPLAYED ON TIE SCREEN
+-->
