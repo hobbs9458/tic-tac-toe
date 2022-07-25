@@ -8,7 +8,6 @@ const newGameBtns = [...document.querySelectorAll('.new-game-btn')];
 const newGameVsCpuBtn = document.querySelector('.new-game-vs-cpu-btn');
 const newGameVsPlayerBtn = document.querySelector('.new-game-vs-player-btn');
 
-
 // GAMEBOARD 
 const restartBtn = document.querySelector('.restart-btn');
 const squares = [...document.querySelectorAll('.square')];
@@ -72,18 +71,22 @@ const identicalArrayElements = function(array) {
     return true;
 } 
 
-const colorWinningRow = function() {
-    for (const [row, array] of Object.entries(scoreCard)) {
-        if(identicalArrayElements(array) && array.length === 3) {
+// RETURNING NOTES 7/23/22: FINISH FUNCTION BY CHANGING SVG COLOR TO BE VISIBLE
+// SEE CODE AT BOTTOM OF DOC FOR STYLE SYNTAX
+const colorWinningRow = function(winnerIcon) {
+    for (const [scoreCardPosition, scoreCardArray] of Object.entries(scoreCard)) {
+        if(identicalArrayElements(scoreCardArray) && scoreCardArray.length === 3) {
             squares.forEach(square => {
-                if(row in square.dataset) {
+                if(scoreCardPosition in square.dataset) {
                     square.style.background = '#31C3BD';
-                    // const svgs = [...square.children];
-                    // svgs.forEach(svg => {
-                    //     if(!svg.classList.contains('hidden')) {
-                    //         svg.path.style.fill = 'black';
-                    //     }
-                    // });
+                    const iconSvgs = [...square.children];
+                    iconSvgs.forEach(icon => {
+                        if(icon.classList.contains(`square-svg-${winnerIcon}-winner`)) {
+                            icon.classList.remove('hidden');
+                        } else {
+                            icon.classList.add('hidden');
+                        }
+                    });
                 }
             });
         }
@@ -138,6 +141,7 @@ const resetBoard = () => {
     });
     squares.forEach(square => {
         square.removeAttribute('disabled');
+        square.style.background = '#1F3641'
     });
 }
 
@@ -169,21 +173,11 @@ const checkForTie = function() {
 }
 
 const winningPlayer = function() {
-    let count = 0;
-    const scoreCardValues = Object.values(scoreCard);
-    for(const scoreArray of scoreCardValues) {
-        for(const score of scoreArray) {
-            if(score === activePlayer) {
-                count++;
-            }
-            if(count === 3) {
-                squares.forEach(square => square.setAttribute('disabled', 'disabled'));
-
-                // RETURNING WINNER
-                return activePlayer;
-            }
+    for(const scoreCardArray of Object.values(scoreCard)) {
+        if(identicalArrayElements(scoreCardArray) && scoreCardArray.length === 3) {
+            squares.forEach(square => square.setAttribute('disabled', 'disabled'));
+            return activePlayer;
         }
-        count = 0;
     }
     return false;
 }
@@ -297,7 +291,7 @@ const togglePlayer = () => {
 const roundEndOrToggle = function() {
     const winner = checkForWinner();
     if(winner) {
-        colorWinningRow();
+        colorWinningRow(winner);
         setTimeout(() => {
             displayGameOverMsg(winner);
             updateTotalScores(winner);
@@ -479,13 +473,26 @@ confirmResetBtn.addEventListener('click', event => {
     resetIconPicker();
 });
 
-// const testSVG = document.querySelector('.svg-test-square');
-// testSVG.firstElementChild.style.fill = 'black';
+// LEGACY
+// const winningPlayer = function() {
+    //     let count = 0;
+        // const scoreCardValues = Object.values(scoreCard);
+        // for(const scoreArray of scoreCardValues) {
+        //     for(const score of scoreArray) {
+        //         if(score === activePlayer) {
+        //             count++;
+        //         }
+        //         if(count === 3) {
+        //             squares.forEach(square => square.setAttribute('disabled', 'disabled'));
 
-// testSVG.classList
-
-
-
+        //             // RETURNING WINNER
+        //             return activePlayer;
+        //         }
+        //     }
+        //     count = 0;
+        // }
+        // return false;
+    // }
 
 
 
