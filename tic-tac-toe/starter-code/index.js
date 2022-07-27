@@ -71,14 +71,12 @@ const identicalArrayElements = function(array) {
     return true;
 } 
 
-// RETURNING NOTES 7/23/22: FINISH FUNCTION BY CHANGING SVG COLOR TO BE VISIBLE
-// SEE CODE AT BOTTOM OF DOC FOR STYLE SYNTAX
 const colorWinningRow = function(winnerIcon) {
     for (const [scoreCardPosition, scoreCardArray] of Object.entries(scoreCard)) {
         if(identicalArrayElements(scoreCardArray) && scoreCardArray.length === 3) {
             squares.forEach(square => {
                 if(scoreCardPosition in square.dataset) {
-                    square.style.background = '#31C3BD';
+                    square.style.background = (activePlayer === 'x') ? '#31C3BD' : '#F2B137';
                     const iconSvgs = [...square.children];
                     iconSvgs.forEach(icon => {
                         if(icon.classList.contains(`square-svg-${winnerIcon}-winner`)) {
@@ -90,7 +88,7 @@ const colorWinningRow = function(winnerIcon) {
                 }
             });
         }
-      }
+    }
 }
 
 const configScoreboardText = function() {
@@ -303,7 +301,6 @@ const roundEndOrToggle = function() {
     }
 }
 
-
 const playerMove = function(event) {
     const squareData = event.currentTarget.dataset;
     updateScoreCard(squareData);
@@ -313,28 +310,71 @@ const playerMove = function(event) {
     }
 }
 
-const cpuGo = function() {
-    // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
-    squares.forEach(square => square.style.pointerEvents = 'none');
+// CPU STRATEGIES
+const checkForWinOpportunity = function() {
+    for (const [scoreCardPosition, scoreCardArray] of Object.entries(scoreCard)) {
+        if(scoreCardArray[0] === activePlayer && 
+            identicalArrayElements(scoreCardArray) && 
+            scoreCardArray.length === 2) {
+                return scoreCardPosition;
+        }
+    }
+}
 
-    // FILTER AVAILABLE SQUARES AND CHOOSE ONE RANDOMLY
-    const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
-    const chosenSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+const checkForDefense = function() {
+    for (const [scoreCardPosition, scoreCardArray] of Object.entries(scoreCard)) {
+        if(scoreCardArray[0] !== activePlayer && 
+            identicalArrayElements(scoreCardArray) && 
+            scoreCardArray.length === 2) {
+                return scoreCardPosition;
+        }
+    }
+}
+
+const findTargetPosition = function(availableSquares, targetSquare ) {
+    for(const square of availableSquares) {
+        if(targetSquare in {...square.dataset}) {
+            return square;
+        }
+    }
+}
+
+const placeCPUIconOnTarget = function(targetSquare) {
     setTimeout(() => {
-        if(chosenSquare) {
-        const svgs = [...chosenSquare.children];
+        if(targetSquare) {
+        const svgs = [...targetSquare.children];
         svgs.forEach(svg => {
             if(svg.classList.contains(`square-svg-${activePlayer}`)) {
                 svg.classList.remove('hidden');
             }
         });
-        chosenSquare.setAttribute('disabled', 'disabled');
-        updateScoreCard(chosenSquare.dataset);
+        targetSquare.setAttribute('disabled', 'disabled');
+        updateScoreCard(targetSquare.dataset);
         roundEndOrToggle();
     }
     // RE-ENABLE POINTER EVENTS FOR USER
     squares.forEach(square => square.style.pointerEvents = 'auto');
     }, 500);
+} 
+
+const cpuGo = function() {
+    let targetSquare;
+
+    // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
+    squares.forEach(square => square.style.pointerEvents = 'none');
+
+    // FILTER AVAILABLE SQUARES AND CHOOSE ONE RANDOMLY
+    const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
+
+    if(checkForWinOpportunity()) {
+        targetSquare = findTargetPosition(availableSquares, checkForWinOpportunity());
+    } else if(checkForDefense()) {
+        targetSquare = findTargetPosition(availableSquares, checkForDefense());
+    } else {
+        targetSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+    }
+
+    placeCPUIconOnTarget(targetSquare);
 }
 
 // -----------------EVENT LISTENERS--------------------
@@ -494,7 +534,30 @@ confirmResetBtn.addEventListener('click', event => {
         // return false;
     // }
 
+// const cpuGo = function() {
+//     // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
+//     squares.forEach(square => square.style.pointerEvents = 'none');
 
+//     // FILTER AVAILABLE SQUARES AND CHOOSE ONE RANDOMLY
+//     const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
+//     const chosenSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+//     setTimeout(() => {
+//         if(chosenSquare) {
+//         const svgs = [...chosenSquare.children];
+//         svgs.forEach(svg => {
+//             if(svg.classList.contains(`square-svg-${activePlayer}`)) {
+//                 svg.classList.remove('hidden');
+//             }
+//         });
+//         chosenSquare.setAttribute('disabled', 'disabled');
+//         updateScoreCard(chosenSquare.dataset);
+//         roundEndOrToggle();
+//     }
+//     // RE-ENABLE POINTER EVENTS FOR USER
+//     squares.forEach(square => square.style.pointerEvents = 'auto');
+//     }, 500);
+// }
+    
 
 
 
