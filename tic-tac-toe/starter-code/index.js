@@ -21,6 +21,7 @@ const activeIndicatorSVGs = [...document.querySelectorAll('.indicator-svg')];
 const xScoreText = document.querySelector('.x-score');
 const oScoreText = document.querySelector('.o-score');
 const tieScore = document.querySelector('.tie-score');
+const middleSquare = document.querySelector('.middle-square');
 
 // RESET MODAL
 const resetGameModal = document.querySelector('.reset-game-modal');
@@ -139,7 +140,9 @@ const resetBoard = () => {
     });
     squares.forEach(square => {
         square.removeAttribute('disabled');
-        square.style.background = '#1F3641'
+        square.style.background = '#1F3641';
+        square.classList.remove('user-claimed');
+        square.classList.remove('cpu-claimed');
     });
 }
 
@@ -306,11 +309,46 @@ const playerMove = function(event) {
     updateScoreCard(squareData);
     roundEndOrToggle();
     if(vsCPU) {
+        // ADD CLASS TO SHOW WHICH PLAYER HAS CLAIMED THE POSITION;
+        // THIS IS RELEVANT TO CPU'S MOVE IF IT GOES 3RD
+        event.currentTarget.classList.add(`user-claimed`)
         cpuGo();
     }
 }
 
 // CPU STRATEGIES
+const targetRandomCorner = function(availableSquares) {
+    const cornerSquares = availableSquares.filter(square => {
+        const squareData = {...square.dataset};
+        return ('corner' in squareData);
+    });
+    return cornerSquares[Math.floor(Math.random() * 4)]
+}
+
+const usersFirstMoveIsCorner = function() {
+    const userPosition = squares.filter(square => square.classList.contains('user-claimed'));
+    return ('corner' in {...userPosition[0].dataset})
+}
+
+// const usersSecondMoveIsMiddle = function() {
+//     const takenSquares = squares.filter(square => square.hasAttribute('disabled', 'disabled'));
+//     for(square of takenSquares) {
+//         console.log(square);
+//         if(square.classList.contains('middle-square') && square.classList.contains('user-claimed')) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+const cpuGoesSecondDefense = function(userPosition, availableSquares) {
+    if(userPosition === 'corner') {
+        return middleSquare;
+    } else {
+        return targetRandomCorner(availableSquares);
+    }
+}
+
 const checkForWinOpportunity = function() {
     for (const [scoreCardPosition, scoreCardArray] of Object.entries(scoreCard)) {
         if(scoreCardArray[0] === activePlayer && 
@@ -331,7 +369,7 @@ const checkForDefense = function() {
     }
 }
 
-const findTargetPosition = function(availableSquares, targetSquare ) {
+const findTargetPosition = function(availableSquares, targetSquare) {
     for(const square of availableSquares) {
         if(targetSquare in {...square.dataset}) {
             return square;
@@ -339,9 +377,30 @@ const findTargetPosition = function(availableSquares, targetSquare ) {
     }
 }
 
+const targetOppositeCorner = function(availableSquares) {
+    const availableCorners = availableSquares.filter(square => {
+        const squareData = {...square.dataset};
+        return ('corner' in squareData) && (!square.classList.contains('cpu-claimed'));
+    });
+    const cpuCorner = squares.filter(square => {
+        return square.classList.contains('cpu-claimed');
+    });
+    if('corner-1' in {...cpuCorner[0].dataset}) {
+        return availableCorners.filter(corner => ('corner-4' in {...corner.dataset}))[0];
+    } 
+    if('corner-4' in {...cpuCorner[0].dataset}) {
+        return availableCorners.filter(corner => ('corner-1' in {...corner.dataset}))[0];
+    } 
+    if('corner-2' in {...cpuCorner[0].dataset}) {
+        return availableCorners.filter(corner => ('corner-3' in {...corner.dataset}))[0];
+    } 
+    if('corner-3' in {...cpuCorner[0].dataset}) {
+        return availableCorners.filter(corner => ('corner-2' in {...corner.dataset}))[0];
+    } 
+}
+
 const placeCPUIconOnTarget = function(targetSquare) {
-    setTimeout(() => {
-        if(targetSquare) {
+    if(targetSquare) {
         const svgs = [...targetSquare.children];
         svgs.forEach(svg => {
             if(svg.classList.contains(`square-svg-${activePlayer}`)) {
@@ -350,31 +409,55 @@ const placeCPUIconOnTarget = function(targetSquare) {
         });
         targetSquare.setAttribute('disabled', 'disabled');
         updateScoreCard(targetSquare.dataset);
+        targetSquare.classList.add('cpu-claimed');
         roundEndOrToggle();
-    }
-    // RE-ENABLE POINTER EVENTS FOR USER
-    squares.forEach(square => square.style.pointerEvents = 'auto');
-    }, 500);
-} 
+    } 
+}
 
-const cpuGo = function() {
+const findStrategicTarget = function(availableSquares) {
     let targetSquare;
-
-    // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
-    squares.forEach(square => square.style.pointerEvents = 'none');
-
-    // FILTER AVAILABLE SQUARES AND CHOOSE ONE RANDOMLY
-    const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
-
-    if(checkForWinOpportunity()) {
+    if(availableSquares.length === 9) { // IF CPU GOES FIRST IT WILL SELECT A RANDOM CORNER
+        targetSquare = targetRandomCorner(availableSquares);
+    } else if(availableSquares.length === 8) {// IF CPU GOES SECOND; TARGET MIDDLE IF USER SELECTS CORNER
+        if(usersFirstMoveIsCorner()) {
+            targetSquare = middleSquare;
+        } else {
+            targetSquare = targetRandomCorner(availableSquares);
+        }
+    } 
+//     PROBLEM: WHEN IMPLEMENTING THE CPU GOING TO THE OPPOSITE CORNER WHEN USER GOES MIDDLE ON SECOND TURN,
+//   IF USER PICKS A CORNER RATHER THAN THE MIDDLE THEN SOMETIMES THE GAME FREEZES
+    // else if(availableSquares.length === 7) {
+    //     if(middleSquare.classList.contains('user-claimed')) {
+    //         // CPU TARGETS OPPOSITE CORNER FROM IT'S CURRNET CORNER
+    //         targetSquare = targetOppositeCorner(availableSquares);
+    //     } else {
+    //         targetSquare = targetRandomCorner(availableSquares);
+    //         // IF CPU GOES THIRD AND OPPONENT DOES NOT GO IN THE MIDDLE; SELECT AN ADJACENT CORNER;
+    //     }
+    // } 
+    
+    else if(checkForWinOpportunity()) {
         targetSquare = findTargetPosition(availableSquares, checkForWinOpportunity());
     } else if(checkForDefense()) {
         targetSquare = findTargetPosition(availableSquares, checkForDefense());
     } else {
         targetSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
     }
+    return targetSquare;
+}
 
-    placeCPUIconOnTarget(targetSquare);
+const cpuGo = function() {
+    // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
+    squares.forEach(square => square.style.pointerEvents = 'none');
+    // FIND AVAILABLE SQUARES AND TARGET ONE
+    const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
+    const targetSquare = findStrategicTarget(availableSquares);
+    setTimeout(() => {
+        placeCPUIconOnTarget(targetSquare);
+        // RE-ENABLE POINTER EVENTS FOR USER
+        squares.forEach(square => square.style.pointerEvents = 'auto');
+    }, 500);
 }
 
 // -----------------EVENT LISTENERS--------------------
@@ -483,6 +566,12 @@ restartBtn.addEventListener('click', openResetGameModal);
 
 squares.forEach(square => {
     square.addEventListener('click', playerMove);
+    // LOG ALL SQUARES TO SEE IF WE CAN DETERMINE WHOS SQUARE IT IS
+    // square.addEventListener('click', event => {
+    //     squares.forEach(square => {
+    //         console.log(square);
+    //     });
+    // });
 });
 
 nextRoundBtn.addEventListener('click', event => {
