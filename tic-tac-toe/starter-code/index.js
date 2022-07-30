@@ -35,6 +35,13 @@ const nextRoundBtn = document.querySelector('.next-round-btn');
 const endOfRoundMsg = document.querySelector('.end-of-round-msg');
 const gameOverMsg = document.querySelector('.game-over-msg');
 
+// SET DIFFICULTY MODAL
+const setDifficultyModal = document.querySelector('.set-difficulty-modal');
+const difficultyBtns = [...document.querySelectorAll('.set-difficulty-btn')];
+const easyModeBtn = document.querySelector('.set-difficulty-btn-easy');
+const hardModeBtn = document.querySelector('.set-difficulty-btn-hard');
+
+
 // SCORES
 const scoreCard = {
     'row-1': [],
@@ -57,6 +64,7 @@ const totalScores = {
 let activePlayer = 'x';
 let playerOneIcon, playerTwoIcon;
 let vsCPU = false;
+let difficultyLevel;
 
 
 // -----------------FUNCTIONS--------------------
@@ -316,21 +324,28 @@ const playerMove = function(event) {
     }
 }
 
+const setDifficulty = function() {
+    // OPEN MODAL AND LET USER SELECT STATE
+    darkOverlay.classList.remove('hidden');
+    setDifficultyModal.classList.remove('hidden');
+}
+
 // CPU STRATEGIES
 const targetRandomCorner = function(availableSquares) {
     const cornerSquares = availableSquares.filter(square => {
         const squareData = {...square.dataset};
         return ('corner' in squareData);
     });
-    return cornerSquares[Math.floor(Math.random() * 4)]
+    return cornerSquares[Math.floor(Math.random() * cornerSquares.length)]
 }
 
-const usersFirstMoveIsCorner = function() {
+const userInCorner = function() {
     const userPosition = squares.filter(square => square.classList.contains('user-claimed'));
     return ('corner' in {...userPosition[0].dataset})
 }
 
 // const usersSecondMoveIsMiddle = function() {
+    // COULD REFACTOR TO JUST RETURN WHETHER USER'S PIECE IS IN MIDDLE
 //     const takenSquares = squares.filter(square => square.hasAttribute('disabled', 'disabled'));
 //     for(square of takenSquares) {
 //         console.log(square);
@@ -386,17 +401,29 @@ const targetOppositeCorner = function(availableSquares) {
         return square.classList.contains('cpu-claimed');
     });
     if('corner-1' in {...cpuCorner[0].dataset}) {
-        return availableCorners.filter(corner => ('corner-4' in {...corner.dataset}))[0];
+        return availableCorners.filter(corner => ('corner-4' in {...corner.dataset}))[0] ?? false;
     } 
     if('corner-4' in {...cpuCorner[0].dataset}) {
-        return availableCorners.filter(corner => ('corner-1' in {...corner.dataset}))[0];
+        return availableCorners.filter(corner => ('corner-1' in {...corner.dataset}))[0] ?? false;
     } 
     if('corner-2' in {...cpuCorner[0].dataset}) {
-        return availableCorners.filter(corner => ('corner-3' in {...corner.dataset}))[0];
+        return availableCorners.filter(corner => ('corner-3' in {...corner.dataset}))[0] ?? false;
     } 
     if('corner-3' in {...cpuCorner[0].dataset}) {
-        return availableCorners.filter(corner => ('corner-2' in {...corner.dataset}))[0];
+        return availableCorners.filter(corner => ('corner-2' in {...corner.dataset}))[0] ?? false;
     } 
+}
+
+const targetAdjacentCorner = function(availableSquares) {
+    if(targetOppositeCorner(availableSquares)) {
+        const oppositeCorner = targetOppositeCorner(availableSquares);
+        oppositeCorner.classList.add('danger');
+        const corners = availableSquares.filter(square => 'corner' in {...square.dataset});
+        const adjacentCorners = corners.filter(corner => !(corner.classList.contains('danger')));
+        oppositeCorner.classList.remove('danger');
+        return adjacentCorners[Math.floor(Math.random() * adjacentCorners.length)];
+    }
+    return false;
 }
 
 const placeCPUIconOnTarget = function(targetSquare) {
@@ -416,43 +443,54 @@ const placeCPUIconOnTarget = function(targetSquare) {
 
 const findStrategicTarget = function(availableSquares) {
     let targetSquare;
-    if(availableSquares.length === 9) { // IF CPU GOES FIRST IT WILL SELECT A RANDOM CORNER
+    if(checkForWinOpportunity()) {
+        targetSquare = findTargetPosition(availableSquares, checkForWinOpportunity());
+    } else if(checkForDefense()) {
+        targetSquare = findTargetPosition(availableSquares, checkForDefense());
+    } else if(availableSquares.length === 9) { // IF CPU GOES FIRST IT WILL SELECT A RANDOM CORNER
         targetSquare = targetRandomCorner(availableSquares);
     } else if(availableSquares.length === 8) {// IF CPU GOES SECOND; TARGET MIDDLE IF USER SELECTS CORNER
-        if(usersFirstMoveIsCorner()) {
+        if(userInCorner()) {
             targetSquare = middleSquare;
         } else {
             targetSquare = targetRandomCorner(availableSquares);
         }
-    } 
-//     PROBLEM: WHEN IMPLEMENTING THE CPU GOING TO THE OPPOSITE CORNER WHEN USER GOES MIDDLE ON SECOND TURN,
-//   IF USER PICKS A CORNER RATHER THAN THE MIDDLE THEN SOMETIMES THE GAME FREEZES
-    // else if(availableSquares.length === 7) {
-    //     if(middleSquare.classList.contains('user-claimed')) {
-    //         // CPU TARGETS OPPOSITE CORNER FROM IT'S CURRNET CORNER
-    //         targetSquare = targetOppositeCorner(availableSquares);
-    //     } else {
-    //         targetSquare = targetRandomCorner(availableSquares);
-    //         // IF CPU GOES THIRD AND OPPONENT DOES NOT GO IN THE MIDDLE; SELECT AN ADJACENT CORNER;
-    //     }
-    // } 
-    
-    else if(checkForWinOpportunity()) {
-        targetSquare = findTargetPosition(availableSquares, checkForWinOpportunity());
-    } else if(checkForDefense()) {
-        targetSquare = findTargetPosition(availableSquares, checkForDefense());
+    } else if(availableSquares.length === 7) { // IF USER IN MIDDLE CPU TARGETS OPPOSITE CORNER, ELSE TARGET RANDOM CORNER
+        const oppositeCorner = targetOppositeCorner(availableSquares);
+        if(middleSquare.classList.contains('user-claimed') && oppositeCorner) {
+            targetSquare = oppositeCorner;
+        } else {
+            if(oppositeCorner){
+                targetSquare = targetAdjacentCorner(availableSquares); 
+            } else {
+                targetSquare = targetRandomCorner(availableSquares);
+            }
+        }
+    } else if(availableSquares.length === 6 && (middleSquare.classList.contains('cpu-claimed'))) {
+        const nonCornerSquares = availableSquares.filter(square => !('corner' in {...square.dataset}));
+        targetSquare = nonCornerSquares[Math.floor(Math.random() * nonCornerSquares.length)];
     } else {
-        targetSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+        if(targetRandomCorner(availableSquares)) {
+            targetSquare = targetRandomCorner(availableSquares);
+        } else {
+            targetSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+        }
     }
     return targetSquare;
 }
 
 const cpuGo = function() {
+    let targetSquare;
     // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
     squares.forEach(square => square.style.pointerEvents = 'none');
     // FIND AVAILABLE SQUARES AND TARGET ONE
     const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
-    const targetSquare = findStrategicTarget(availableSquares);
+    if(difficultyLevel === 'easy') {
+        targetSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
+    } else if(difficultyLevel === 'hard') {
+        targetSquare = findStrategicTarget(availableSquares);
+    }
+    // targetSquare = findStrategicTarget(availableSquares);
     setTimeout(() => {
         placeCPUIconOnTarget(targetSquare);
         // RE-ENABLE POINTER EVENTS FOR USER
@@ -481,9 +519,7 @@ iconPickerBtns.forEach(btn => {
 newGameVsCpuBtn.addEventListener('click', event => {
     vsCPU = true;
     setPlayerIcons();
-    if(playerOneIcon === 'o') {
-        cpuGo();
-    }
+    setDifficulty();
 });
 
 newGameVsPlayerBtn.addEventListener('click', event => {
@@ -548,6 +584,24 @@ squares.forEach(square => {
         icons[3].classList.add('hidden'); 
         // DISABLE BTN
         target.setAttribute('disabled', 'disabled');
+    });
+});
+
+// SET DIFFICULTY MODAL LISTENERS
+easyModeBtn.addEventListener('click', event => {
+    difficultyLevel = 'easy';
+});
+hardModeBtn.addEventListener('click', event => {
+    difficultyLevel = 'hard';
+});
+difficultyBtns.forEach(btn => {
+    btn.addEventListener('click', event => {
+        setDifficultyModal.classList.add('hidden');
+        darkOverlay.classList.add('hidden');
+        console.log(difficultyLevel);
+        if(playerOneIcon === 'o') {
+            cpuGo();
+        }
     });
 });
 

@@ -254,6 +254,7 @@ body {
     background-color: rgba(0, 0, 0, 0.5)
 }
 /* MODALS */
+.set-difficulty-modal-content-wrap,
 .reset-game-modal-content-wrap {
     display: flex;
     flex-direction: column;
@@ -261,7 +262,7 @@ body {
     align-items: center;
     margin-top: 1.5rem;
 }
-
+.set-difficulty-modal,
 .reset-game-modal,
 .game-over-modal {
     position: absolute;
@@ -276,6 +277,11 @@ body {
     margin-bottom: 0;
 }
 
+.set-difficulty-btn {
+    font-weight: bold;
+}
+
+.set-difficulty-btn,
 .reset-btn,
 .quit-btn,
 .next-round-btn {
@@ -290,6 +296,7 @@ body {
 .quit-btn:hover {
     background-color: var(--primary-light-color-active);
 }
+.set-difficulty-btn,
 .reset-btn,
 .next-round-btn {
     width: 146px;
@@ -305,6 +312,18 @@ body {
 .reset-btn-confirm:hover,
 .next-round-btn:hover {
     background-color: var(--secondary-light-color-active);
+}
+.set-difficulty-btn-easy {
+    background-color: var(--secondary-dark-color-active);
+}
+.set-difficulty-btn-easy:hover {
+    background-color: var(--secondary-dark-color);
+}
+.set-difficulty-btn-hard {
+    background-color: var(--secondary-light-color-active);
+}
+.set-difficulty-btn-hard:hover {
+    background-color: var(--secondary-light-color);
 }
 .game-over-winner-msg {
     width: 100%;
