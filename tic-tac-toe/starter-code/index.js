@@ -60,11 +60,12 @@ const totalScores = {
     tie: 0
 }
 
-// RE-ASSIGNED 
+// RE-ASSIGNED / "STATE VARS"
 let activePlayer = 'x';
 let playerOneIcon, playerTwoIcon;
 let vsCPU = false;
 let difficultyLevel;
+let isMobile = window.matchMedia("(pointer:coarse)").matches;
 
 
 // -----------------FUNCTIONS--------------------
@@ -305,7 +306,6 @@ const roundEndOrToggle = function() {
             displayGameOverMsg(winner);
             updateTotalScores(winner);
         }, 500);
-        
     } else {
         togglePlayer();
         toggleActiveIcon();
@@ -525,37 +525,36 @@ newGameBtns.forEach(btn => {
     });
 });
 
-
-// ADD ACTIVE BACKGROUND COLOR TO GAMEBOARD RESTART BTN ON HOVER
-restartBtn.addEventListener('mouseover', event => {
-    event.currentTarget.style.background = '#DBE8ED';
-});
-restartBtn.addEventListener('mouseout', event => {
-    event.currentTarget.style.background = '#A8BFC9';
-});
-
-// ACTIVE STATES FOR GAMEBOARD SQUARES
-squares.forEach(square => {
-    square.addEventListener('mouseover', event => {
-        const target = event.currentTarget;
-        const svgs = [...target.children];
-        svgs.forEach(svg => {
-            if(svg.classList.contains(`svg-outline-active-${activePlayer}`)) {
-                svg.classList.remove('hidden');
-            }
+// HOVER STATES ONLY APPLY TO NON MOBILE DEVICES
+if(!isMobile) {
+    restartBtn.addEventListener('mouseover', event => {
+        event.currentTarget.style.background = '#DBE8ED';
+    });
+    restartBtn.addEventListener('mouseout', event => {
+        event.currentTarget.style.background = '#A8BFC9';
+    });
+    // ACTIVE STATES FOR GAMEBOARD SQUARES
+    squares.forEach(square => {
+        square.addEventListener('mouseover', event => {
+            const target = event.currentTarget;
+            const svgs = [...target.children];
+            svgs.forEach(svg => {
+                if(svg.classList.contains(`svg-outline-active-${activePlayer}`)) {
+                    svg.classList.remove('hidden');
+                }
+            });
+        });
+        square.addEventListener('mouseout', event => {
+            const target = event.currentTarget;
+            const svgs = [...target.children];
+            svgs.forEach(svg => {
+                if(svg.classList.contains(`svg-outline-active-${activePlayer}`)) {
+                    svg.classList.add('hidden');
+                }
+            });
         });
     });
-    square.addEventListener('mouseout', event => {
-        const target = event.currentTarget;
-        const svgs = [...target.children];
-        svgs.forEach(svg => {
-            if(svg.classList.contains(`svg-outline-active-${activePlayer}`)) {
-                svg.classList.add('hidden');
-            }
-        });
-    });
-});
-
+}
 
 // PLACING ICONS ON GAMEBOARD SQUARES
 squares.forEach(square => {
@@ -637,50 +636,6 @@ confirmResetBtn.addEventListener('click', event => {
     resetIconPicker();
 });
 
-// LEGACY
-// const winningPlayer = function() {
-    //     let count = 0;
-        // const scoreCardValues = Object.values(scoreCard);
-        // for(const scoreArray of scoreCardValues) {
-        //     for(const score of scoreArray) {
-        //         if(score === activePlayer) {
-        //             count++;
-        //         }
-        //         if(count === 3) {
-        //             squares.forEach(square => square.setAttribute('disabled', 'disabled'));
-
-        //             // RETURNING WINNER
-        //             return activePlayer;
-        //         }
-        //     }
-        //     count = 0;
-        // }
-        // return false;
-    // }
-
-// const cpuGo = function() {
-//     // DISABLE POINTER EVENTS SO USER CANNOT INTERFERE
-//     squares.forEach(square => square.style.pointerEvents = 'none');
-
-//     // FILTER AVAILABLE SQUARES AND CHOOSE ONE RANDOMLY
-//     const availableSquares = squares.filter(square => !square.hasAttribute('disabled'));
-//     const chosenSquare = availableSquares[Math.floor(Math.random() * availableSquares.length)];
-//     setTimeout(() => {
-//         if(chosenSquare) {
-//         const svgs = [...chosenSquare.children];
-//         svgs.forEach(svg => {
-//             if(svg.classList.contains(`square-svg-${activePlayer}`)) {
-//                 svg.classList.remove('hidden');
-//             }
-//         });
-//         chosenSquare.setAttribute('disabled', 'disabled');
-//         updateScoreCard(chosenSquare.dataset);
-//         roundEndOrToggle();
-//     }
-//     // RE-ENABLE POINTER EVENTS FOR USER
-//     squares.forEach(square => square.style.pointerEvents = 'auto');
-//     }, 500);
-// }
     
 
 
