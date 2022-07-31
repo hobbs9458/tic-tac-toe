@@ -279,6 +279,7 @@ body {
 
 .set-difficulty-btn {
     font-weight: bold;
+    font-family: 'Outfit', sans-serif;
 }
 
 .set-difficulty-btn,
@@ -335,4 +336,122 @@ body {
 .game-over-winner-msg-svg {
     margin-right: 1.5rem;
 }
+.reset-btn {
+    font-weight: bold;
+    font-family: Outfit, sans-serif;
+    font-size: 16px;
+}
 
+/* MEDIA QUERIES */
+@media (max-width: 450px), (max-height: 500px) {
+    /* START SCREEN */
+    .start-screen {
+        width: 327px;
+        height: 429px;
+    }
+    .pick-mark-btn-wrap {
+        width: 279px;
+    }
+    .new-game-btn {
+        width: 327px;
+        height: 56px;
+    }
+    .icon-picker-btn {
+        width: 132px;
+    }
+    /* GAMEBOARD SCREEN */
+    .game-board {
+        width: 328px;
+        height: 516px;
+    }
+    .main-board {
+        width: 328px;
+        height: 328px;
+        /* grid-gap: 1rem; */
+    }
+    .square {
+        width: 96px;
+        height: 96px;
+    }
+    .square-svg,
+    .svg-outline-active {
+        width: 40px;
+        height: 40px;
+    }
+    .player-turn-indicator {
+        width: 96px;
+        height: 40px;
+        margin-right: 2rem;
+    }
+    .restart-btn {
+        width: 40px;
+        height: 40px;
+    }
+    .scoreboard {
+        width: 96px;
+        height: 64px;
+    }
+    .score {
+        font-size: 20px;
+        margin-top: 0;                
+    }
+    .scoreboard-icon {
+        font-size: 12px;
+    }
+    /* MODALS */
+    .reset-game-modal,
+    .game-over-modal,
+    .set-difficulty-modal {
+        height: 228px;
+    }
+    .set-difficulty-modal-content-wrap {
+        margin: 0;
+    }
+    .set-difficulty-modal-msg {
+        font-size: 24px;
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+    }
+    .set-difficulty-btn {
+        font-size: 16px;
+    }
+    .game-over-modal {
+        padding-top: 1rem;
+    }
+    .game-over-winner-msg-svg {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+    }
+    .reset-modal-msg,
+    .end-of-round-msg {
+        font-size: 24px;
+    }
+    .reset-modal-msg {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+
+} 
+
+@media (max-height: 450px) and (orientation: landscape) {
+    /* START SCREEN */
+    .start-screen {
+        height: 375px;
+    }
+    .start-screen-icons-wrap {
+        margin-bottom: 7.5px;
+    }
+    .pick-mark {
+        margin-bottom: 7.5px;
+    }
+    .new-game-btn:first-of-type {
+        margin-bottom: 7.5px;
+    }
+    /* GAMEBOARD */
+    .app-wrap {
+        padding-top: 3rem;
+        height: 100%;
+    }
+}

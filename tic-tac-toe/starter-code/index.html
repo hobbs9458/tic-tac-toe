@@ -313,7 +313,7 @@
           <h3 class="x-score score m-heading">0</h3>
         </div>
         <div class="scoreboard scoreboard-tie">
-          <p class="ties">TIES</p>
+          <p class="ties scoreboard-icon">TIES</p>
           <h3 class="tie-score score m-heading">0</h3>
         </div>
         <div class="scoreboard scoreboard-o">
@@ -329,7 +329,7 @@
     
     <div class="set-difficulty-modal hidden">
       <div class="set-difficulty-modal-content-wrap">
-        <h2 class="l-heading reset-modal-msg">SELECT DIFFICULTY LEVEL!</h2>
+        <h2 class="l-heading set-difficulty-modal-msg">SELECT DIFFICULTY LEVEL</h2>
         <div class="reset-btns-wrap">
           <button class="btn set-difficulty-btn set-difficulty-btn-easy ">EASY</button>
           <button class="btn set-difficulty-btn set-difficulty-btn-hard ">DIFFICULT</button>
@@ -340,10 +340,10 @@
     <div class="game-over-modal hidden">
       <h3 class="game-over-msg xs-heading"></h3>
       <div class="game-over-winner-msg">
-        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
           <path d="M32 0c17.673 0 32 14.327 32 32 0 17.673-14.327 32-32 32C14.327 64 0 49.673 0 32 0 14.327 14.327 0 32 0Zm0 18.963c-7.2 0-13.037 5.837-13.037 13.037 0 7.2 5.837 13.037 13.037 13.037 7.2 0 13.037-5.837 13.037-13.037 0-7.2-5.837-13.037-13.037-13.037Z" fill="#F2B137"/>
         </svg>
-        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" xmlns="http://www.w3.org/2000/svg">
+        <svg class="game-over-winner-msg-svg hidden" width="64" height="64" viewBox="0,0,64,64" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.002 1.147 32 18.145 48.998 1.147a3 3 0 0 1 4.243 0l9.612 9.612a3 3 0 0 1 0 4.243L45.855 32l16.998 16.998a3 3 0 0 1 0 4.243l-9.612 9.612a3 3 0 0 1-4.243 0L32 45.855 15.002 62.853a3 3 0 0 1-4.243 0L1.147 53.24a3 3 0 0 1 0-4.243L18.145 32 1.147 15.002a3 3 0 0 1 0-4.243l9.612-9.612a3 3 0 0 1 4.243 0Z" fill="#31C3BD" fill-rule="evenodd"/>
         </svg>
         <h2 class="l-heading end-of-round-msg">TAKES THE ROUND</h2>
@@ -382,11 +382,8 @@
 
 <!-- Returning notes: 
 
-TODOS:
-- ***IF USER GOES CORNER AND CPU GO MIDDLE THEN USER GO OPPOSITE CORNER,
-THEN NEED TO MAKE SURE THE CPU DOES NOT CHOOSE A CORNER; OTHERWISE IT'S VULNERABLE TO LOSE THE GAME
--*** WHEN CHOOSING AN ADJACENT CORNER, USE targetOppositeCorner TO FIND THE OPPOSITE CORNER,
-AND FILTER THE AVAILABLE CORNERS TO NOT BE THAT OPPOSITE CORNER
+TODOS
+- NEED TO STYLE FOR MOBILE AND TABLET DISPLAYS
 - READ THROUGH JS AND SEE WHAT NEED WORK
 - ADD MEDIA QUERIES FOR TABLET AND MOBILE
 - I DON'T LIKE THE HARDCODED STUFF I HAVE LIKE svg[3] etc. 

@@ -344,18 +344,6 @@ const userInCorner = function() {
     return ('corner' in {...userPosition[0].dataset})
 }
 
-// const usersSecondMoveIsMiddle = function() {
-    // COULD REFACTOR TO JUST RETURN WHETHER USER'S PIECE IS IN MIDDLE
-//     const takenSquares = squares.filter(square => square.hasAttribute('disabled', 'disabled'));
-//     for(square of takenSquares) {
-//         console.log(square);
-//         if(square.classList.contains('middle-square') && square.classList.contains('user-claimed')) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
-
 const cpuGoesSecondDefense = function(userPosition, availableSquares) {
     if(userPosition === 'corner') {
         return middleSquare;
@@ -598,7 +586,6 @@ difficultyBtns.forEach(btn => {
     btn.addEventListener('click', event => {
         setDifficultyModal.classList.add('hidden');
         darkOverlay.classList.add('hidden');
-        console.log(difficultyLevel);
         if(playerOneIcon === 'o') {
             cpuGo();
         }
@@ -620,12 +607,6 @@ restartBtn.addEventListener('click', openResetGameModal);
 
 squares.forEach(square => {
     square.addEventListener('click', playerMove);
-    // LOG ALL SQUARES TO SEE IF WE CAN DETERMINE WHOS SQUARE IT IS
-    // square.addEventListener('click', event => {
-    //     squares.forEach(square => {
-    //         console.log(square);
-    //     });
-    // });
 });
 
 nextRoundBtn.addEventListener('click', event => {
